@@ -76,6 +76,9 @@ export const CreateEventCategoryModal = ({
             queryClient.invalidateQueries({ queryKey: ["user-event-categories"] })
             setIsOpen(false)
         },
+        onError: (error) => {
+            console.error("Failed to create event category:", error)
+        },
     })
 
     const {

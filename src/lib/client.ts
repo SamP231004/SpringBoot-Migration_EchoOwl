@@ -3,6 +3,16 @@ import { hc } from "hono/client"
 import { HTTPException } from "hono/http-exception"
 import superjson from "superjson"
 
+declare global {
+  interface Window {
+    Clerk?: {
+      session?: {
+        getToken: () => Promise<string | null>
+      } | null
+    }
+  }
+}
+
 const getBaseUrl = () => {
   if (typeof window !== "undefined") {
     return ""
@@ -15,13 +25,37 @@ const getBaseUrl = () => {
       : "https://<YOUR_DEPLOYED_WORKER_URL>/"
 }
 
+const getClerkToken = async () => {
+  if (typeof window === "undefined") {
+    return null
+  }
+
+  return window.Clerk?.session?.getToken() ?? null
+}
+
 export const baseClient = hc<AppType>(getBaseUrl(), {
   fetch: async (input: RequestInfo | URL, init?: RequestInit) => {
-    const response = await fetch(input, { ...init, cache: "no-store" })
+    const token = await getClerkToken()
+    const headers = new Headers(init?.headers)
+    if (token && !headers.has("Authorization")) {
+      headers.set("Authorization", `Bearer ${token}`)
+    }
+
+    const response = await fetch(input, {
+      ...init,
+      cache: "no-store",
+      headers,
+    })
 
     if (response.status >= 400) {
+      const message = await response
+        .clone()
+        .json()
+        .then((body) => body?.message ?? response.statusText)
+        .catch(() => response.statusText)
+
       throw new HTTPException(response.status as any, {
-        message: response.statusText,
+        message,
         res: response,
       })
     }

@@ -5,11 +5,11 @@ type EventCategoryDTO = {
     name: string
     emoji: string | null
     color: number
-    updatedAt: string | Date
-    createdAt: string | Date
+    updatedAt: string | Date | number
+    createdAt: string | Date | number
     uniqueFieldCount: number
     eventsCount: number
-    lastPing: string | Date | null
+    lastPing: string | Date | number | null
 }
 
 type GetEventCategoriesResponse = {
@@ -26,6 +26,12 @@ import { ArrowRight, BarChart2, Clock, Database, Trash2 } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 import { DashboardEmptyState } from "./dashboard-empty-state"
+
+const toDate = (value: string | Date | number): Date => {
+    if (value instanceof Date) return value
+    if (typeof value === 'number') return new Date(value * 1000)
+    return new Date(value)
+}
 
 export const DashboardPageContent = () => {
     const [deletingCategory, setDeletingCategory] = useState<string | null>(null)
@@ -104,7 +110,7 @@ export const DashboardPageContent = () => {
                                         {category.emoji || "📂"} {category.name}
                                     </h3>
                                     <p className="text-sm/6 text-gray-600">
-                                        {format(category.createdAt, "MMM d, yyyy")}
+                                        {format(toDate(category.createdAt), "MMM d, yyyy")}
                                     </p>
                                 </div>
                             </div>
@@ -115,7 +121,7 @@ export const DashboardPageContent = () => {
                                     <span className="font-medium">Last ping:</span>
                                     <span className="ml-1">
                                         {category.lastPing
-                                            ? formatDistanceToNow(category.lastPing) + " ago"
+                                            ? formatDistanceToNow(toDate(category.lastPing)) + " ago"
                                             : "Never"}
                                     </span>
                                 </div>

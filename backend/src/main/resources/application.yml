@@ -1,0 +1,30 @@
+server:
+  port: ${PORT:8080}
+
+spring:
+  application:
+    name: echoowl-backend
+  datasource:
+    url: ${JDBC_DATABASE_URL:${DATABASE_URL:}}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        physical_naming_strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        implicit_naming_strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
+
+echoowl:
+  app-url: ${NEXT_PUBLIC_APP_URL:http://localhost:3000}
+  stripe:
+    secret-key: ${STRIPE_SECRET_KEY:}
+    webhook-secret: ${STRIPE_WEBHOOK_SECRET:}
+    price-id: ${STRIPE_PRICE_ID:price_1SeCfHDLMwGutIU9nmNnnEBL}
+  discord:
+    bot-token: ${DISCORD_BOT_TOKEN:}
+  clerk:
+    secret-key: ${CLERK_SECRET_KEY:}

@@ -11,6 +11,12 @@ import { Card } from "@/components/ui/card"
 import { ArrowUpDown, BarChart } from "lucide-react"
 import { isAfter, isToday, startOfMonth, startOfWeek } from "date-fns"
 
+const toDate = (value: string | Date | number): Date => {
+    if (value instanceof Date) return value
+    if (typeof value === 'number') return new Date(value * 1000)
+    return new Date(value)
+}
+
 import {
     ColumnDef,
     ColumnFiltersState,
@@ -61,6 +67,7 @@ export const CategoryPageContent = ({
 
     const { data: pollingData } = useQuery({
         queryKey: ["category", category.name, "hasEvents"],
+        queryFn: () => ({ hasEvents: initialHasEvents }),
         initialData: { hasEvents: initialHasEvents },
     })
 
@@ -112,7 +119,7 @@ export const CategoryPageContent = ({
                     )
                 },
                 cell: ({ row }) => {
-                    return new Date(row.getValue("createdAt")).toLocaleString()
+                    return toDate(row.getValue("createdAt")).toLocaleString()
                 },
             },
             ...(data?.events[0]
@@ -194,7 +201,7 @@ export const CategoryPageContent = ({
         const monthStart = startOfMonth(now)
 
         data.events.forEach((event) => {
-            const eventDate = event.createdAt
+            const eventDate = toDate(event.createdAt)
 
             Object.entries(event.fields as object).forEach(([field, value]) => {
                 if (typeof value === "number") {

@@ -24,7 +24,7 @@ export const UpgradePageContent = ({ plan }: { plan: Plan }) => {
 
     const { data: usageData } = useQuery({
         queryKey: ["usage"],
-        queryFn: async (): Promise<{ eventsUsed: number; eventsLimit: number; categoriesUsed: number; categoriesLimit: number; resetDate: Date }> => {
+        queryFn: async (): Promise<{ eventsUsed: number; eventsLimit: number; categoriesUsed: number; categoriesLimit: number; resetDate: number }> => {
             const res = await client.project.getUsage.$get({
                 fetch: {
                     cache: "no-store",
@@ -84,7 +84,7 @@ export const UpgradePageContent = ({ plan }: { plan: Plan }) => {
             <p className="text-sm text-gray-500">
                 Usage will reset{" "}
                 {usageData?.resetDate ? (
-                    format(usageData.resetDate, "MMM d, yyyy")
+                    format(new Date(usageData.resetDate * 1000), "PPPp")
                 ) : (
                     <span className="animate-pulse w-8 h-4 bg-gray-200"></span>
                 )}
