@@ -2,7 +2,7 @@
 
 **EchoOwl** is a production-ready **SaaS event monitoring platform** built with modern **Next.js**, **TypeScript**, and **Spring Boot**, designed to deliver real-time alerts via **Discord** with a clean, intuitive dashboard experience.
 
-🌐 **Live Demo:** https://echo-owl.vercel.app/
+🌐 **Live Demo:** https://spring-boot-migration-echo-owl.vercel.app/
 
 > A real-world SaaS featuring authentication, subscriptions, Stripe payments, webhooks, and quota-based access control.
 
