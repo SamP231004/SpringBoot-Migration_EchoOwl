@@ -5,7 +5,7 @@ const nextConfig = {
       beforeFiles: [
         {
           source: "/api/:path*",
-          destination: "http://localhost:8080/api/:path*",
+          destination: "https://springboot-migration-echoowl.onrender.com/api/:path*",
         },
       ],
     }

@@ -30,7 +30,7 @@ export const UpgradePageContent = ({ plan }: { plan: Plan }) => {
                     cache: "no-store",
                 },
             })
-            const data = await res.json() as { eventsUsed: number; eventsLimit: number; categoriesUsed: number; categoriesLimit: number; resetDate: Date }
+            const data = await res.json() as { eventsUsed: number; eventsLimit: number; categoriesUsed: number; categoriesLimit: number; resetDate: number }
             return data
         },
     })

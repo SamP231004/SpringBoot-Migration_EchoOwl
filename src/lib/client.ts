@@ -1,4 +1,3 @@
-import { AppType } from "@/server"
 import { hc } from "hono/client"
 import { HTTPException } from "hono/http-exception"
 import superjson from "superjson"
@@ -33,7 +32,7 @@ const getClerkToken = async () => {
   return window.Clerk?.session?.getToken() ?? null
 }
 
-export const baseClient = hc<AppType>(getBaseUrl(), {
+export const baseClient = hc<any>(getBaseUrl(), {
   fetch: async (input: RequestInfo | URL, init?: RequestInit) => {
     const token = await getClerkToken()
     const headers = new Headers(init?.headers)
@@ -130,4 +129,4 @@ function createProxy(target: any, path: string[] = []): any {
   })
 }
 
-export const client: typeof baseClient = createProxy(baseClient)
+export const client: any = createProxy(baseClient)
