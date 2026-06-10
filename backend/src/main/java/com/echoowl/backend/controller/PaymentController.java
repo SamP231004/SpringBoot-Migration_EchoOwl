@@ -34,4 +34,14 @@ public class PaymentController {
         User user = auth.requireUser(headers);
         return Map.of("plan", user.getPlan().name());
     }
+
+    @PostMapping("/createMobileCheckoutSession")
+    public Map<String, Object> createMobileCheckoutSession(
+            @RequestHeader HttpHeaders headers) throws Exception {
+        User user = auth.requireUser(headers);
+
+        return Map.of(
+                "url",
+                payments.createMobileCheckoutSession(user));
+    }
 }

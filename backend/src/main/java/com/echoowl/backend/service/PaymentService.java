@@ -41,6 +41,38 @@ public class PaymentService {
         return Session.create(params).getUrl();
     }
 
+    public String createMobileCheckoutSession(
+            User user) throws Exception {
+
+        Stripe.apiKey = properties.stripe().secretKey();
+
+        SessionCreateParams params = SessionCreateParams.builder()
+                .setMode(
+                        SessionCreateParams.Mode.PAYMENT)
+                .setSuccessUrl(
+                        "echoowl://upgrade?status=success")
+                .setCancelUrl(
+                        "echoowl://upgrade?status=cancelled")
+                .setCustomerEmail(
+                        user.getEmail())
+                .putMetadata(
+                        "userId",
+                        user.getId())
+                .addLineItem(
+                        SessionCreateParams.LineItem
+                                .builder()
+                                .setPrice(
+                                        properties
+                                                .stripe()
+                                                .priceId())
+                                .setQuantity(1L)
+                                .build())
+                .build();
+
+        return Session.create(params)
+                .getUrl();
+    }
+
     @Transactional
     public void handleWebhook(String body, String signature) throws SignatureVerificationException {
         Event event = Webhook.constructEvent(body, signature, properties.stripe().webhookSecret().trim());
