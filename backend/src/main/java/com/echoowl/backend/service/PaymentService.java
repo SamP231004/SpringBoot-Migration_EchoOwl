@@ -49,10 +49,8 @@ public class PaymentService {
         SessionCreateParams params = SessionCreateParams.builder()
                 .setMode(
                         SessionCreateParams.Mode.PAYMENT)
-                .setSuccessUrl(
-                        "echoowl://upgrade?status=success")
-                .setCancelUrl(
-                        "echoowl://upgrade?status=cancelled")
+                .setSuccessUrl("echoowl://upgrade?status=success")
+                .setCancelUrl("echoowl://upgrade?status=cancelled")
                 .setCustomerEmail(
                         user.getEmail())
                 .putMetadata(
